@@ -6,7 +6,7 @@ def PicOfTheDay():
     print(r)
     load = json.loads(r.content)
 
-    Save("picoftheday", load, None)
+    Save("picoftheday", load)
 
 def RandomPic():
     amount = input("Enter amount of pictures: ")
@@ -16,49 +16,31 @@ def RandomPic():
     load = json.loads(r.content)
 
     for x in range(int(amount)):
-        Save(f"randompic{str(x)}", load, x)
+        send = load[x]
+        Save(f"randompic{str(x)}", send)
 
 
-def Save(saveName, load, amount):
+def Save(saveName, load):
     
-    if(amount == None):
-        save = open(f"{saveName}.txt", "w")
-        save.write(f"date: {load['date']}")
-        save.write(f"\nexplanation: {load['explanation']}")
-        save.close
+    save = open(f"{saveName}.txt", "w")
+    save.write(f"date: {load['date']}")
+    save.write(f"\nexplanation: {load['explanation']}")
+    save.close
 
-        try:
-            receive = requests.get(load["hdurl"])
+    try:
+        receive = requests.get(load["hdurl"])
 
-            picture = open(f"{saveName}.png", 'wb')
-            picture.write(receive.content)
-            picture.close()
+        picture = open(f"{saveName}.png", 'wb')
+        picture.write(receive.content)
+        picture.close()
 
-        except:
-            picture = open(f"{saveName}_ot.txt", "w")
-            picture.write(load["url"])
-            picture.close
-
-    else:
-        save = open(f"{saveName}.txt", "w")
-        save.write(f"date: {load[amount]['date']}")
-        save.write(f"\nexplanation: {load[amount]['explanation']}")
-        save.close
-
-        try:
-            receive = requests.get(load[amount]["hdurl"])
-
-            picture = open(f"{saveName}.png", 'wb')
-            picture.write(receive.content)
-            picture.close()
-
-        except:
-            picture = open(f"{saveName}_ot.txt", "w")
-            picture.write(load[amount]["url"])
-            picture.close
+    except:
+        picture = open(f"{saveName}_ot.txt", "w")
+        picture.write(load["url"])
+        picture.close
 
 
 apikey = input("Enter API KEY: ")
 
 
-PicOfTheDay()
+RandomPic()
