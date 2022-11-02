@@ -7,11 +7,17 @@ def PicOfTheDay():
     print(r)
     load = json.loads(r.content)
 
-    receive = requests.get(load["hdurl"])
+    try:
+        receive = requests.get(load["hdurl"])
 
-    picture = open('picoftheday.png', 'wb')
-    picture.write(receive.content)
-    picture.close()
+        picture = open('picoftheday.png', 'wb')
+        picture.write(receive.content)
+        picture.close()
+
+    except:
+        picture = open("picoftheday_os.txt", "w")
+        picture.write(load["url"])
+        picture.close
 
     explanation = open("picoftheday.txt", "w")
     explanation.write("date: " + load['date'])
@@ -42,4 +48,4 @@ def RandomPic():
 
 
 
-RandomPic()
+PicOfTheDay()
