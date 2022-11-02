@@ -6,22 +6,7 @@ def PicOfTheDay():
     print(r)
     load = json.loads(r.content)
 
-    try:
-        receive = requests.get(load["hdurl"])
-
-        picture = open('picoftheday.png', 'wb')
-        picture.write(receive.content)
-        picture.close()
-
-    except:
-        picture = open("picoftheday_os.txt", "w")
-        picture.write(load["url"])
-        picture.close
-
-    explanation = open("picoftheday.txt", "w")
-    explanation.write(f"date: {load['date']}")
-    explanation.write(f"\nexplanation: {load['explanation']}")
-    explanation.close
+    Save("picoftheday", load, None)
 
 def RandomPic():
     amount = input("Enter amount of pictures: ")
@@ -31,20 +16,49 @@ def RandomPic():
     load = json.loads(r.content)
 
     for x in range(int(amount)):
-        recpic = requests.get(load[x]['hdurl'])
+        Save(f"randompic{str(x)}", load, x)
 
-        picture = open(f"randompic{str(x)}.png", "wb")
-        picture.write(recpic.content)
-        picture.close()
 
-        explanation = open(f"randompic{str(x)}.txt", "w")
-        explanation.write(f"date: {load[x]['date']}")
-        explanation.write(f"\nexplanation: {load[x]['explanation']}")
-        explanation.close()
+def Save(saveName, load, amount):
+    
+    if(amount == None):
+        save = open(f"{saveName}.txt", "w")
+        save.write(f"date: {load['date']}")
+        save.write(f"\nexplanation: {load['explanation']}")
+        save.close
 
+        try:
+            receive = requests.get(load["hdurl"])
+
+            picture = open(f"{saveName}.png", 'wb')
+            picture.write(receive.content)
+            picture.close()
+
+        except:
+            picture = open(f"{saveName}_ot.txt", "w")
+            picture.write(load["url"])
+            picture.close
+
+    else:
+        save = open(f"{saveName}.txt", "w")
+        save.write(f"date: {load[amount]['date']}")
+        save.write(f"\nexplanation: {load[amount]['explanation']}")
+        save.close
+
+        try:
+            receive = requests.get(load[amount]["hdurl"])
+
+            picture = open(f"{saveName}.png", 'wb')
+            picture.write(receive.content)
+            picture.close()
+
+        except:
+            picture = open(f"{saveName}_ot.txt", "w")
+            picture.write(load[amount]["url"])
+            picture.close
 
 
 apikey = input("Enter API KEY: ")
 
 
-RandomPic()
+PicOfTheDay()
