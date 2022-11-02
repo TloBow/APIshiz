@@ -1,9 +1,8 @@
-from random import Random
 import requests
 import json
 
 def PicOfTheDay():
-    r = requests.get("https://api.nasa.gov/planetary/apod?api_key=" + apikey)
+    r = requests.get(f"https://api.nasa.gov/planetary/apod?api_key={apikey}")
     print(r)
     load = json.loads(r.content)
 
@@ -20,30 +19,27 @@ def PicOfTheDay():
         picture.close
 
     explanation = open("picoftheday.txt", "w")
-    explanation.write("date: " + load['date'])
-    explanation.write("\nexplanation: " + load['explanation'])
+    explanation.write(f"date: {load['date']}")
+    explanation.write(f"\nexplanation: {load['explanation']}")
     explanation.close
 
 def RandomPic():
-    amount_str = input("Enter amount of pictures: ")
-    amount_int = int(amount_str)
+    amount = input("Enter amount of pictures: ")
 
-    r = requests.get("https://api.nasa.gov/planetary/apod?count=" + amount_str + "&api_key=" + apikey)
+    r = requests.get(f"https://api.nasa.gov/planetary/apod?count={amount}&api_key={apikey}")
     print(r)
     load = json.loads(r.content)
 
-    for x in range(amount_int):
+    for x in range(int(amount)):
         recpic = requests.get(load[x]['hdurl'])
 
-        number = str(x)
-
-        picture = open("randompic" + number + ".png", "wb")
+        picture = open(f"randompic{str(x)}.png", "wb")
         picture.write(recpic.content)
         picture.close()
 
-        explanation = open("randompic" + number + ".txt", "w")
-        explanation.write("date: " + load[x]['date'])
-        explanation.write("\nexplanation: " + load[x]['explanation'])
+        explanation = open(f"randompic{str(x)}.txt", "w")
+        explanation.write(f"date: {load[x]['date']}")
+        explanation.write(f"\nexplanation: {load[x]['explanation']}")
         explanation.close()
 
 
@@ -51,4 +47,4 @@ def RandomPic():
 apikey = input("Enter API KEY: ")
 
 
-PicOfTheDay()
+RandomPic()
