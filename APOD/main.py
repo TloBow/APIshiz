@@ -3,7 +3,7 @@ import requests
 import json
 
 def PicOfTheDay():
-    r = requests.get("https://api.nasa.gov/planetary/apod?api_key=NIFH1JyVc1eMgvFxXShtJkGWgPAMFFjoCKJpcDmB")
+    r = requests.get("https://api.nasa.gov/planetary/apod?api_key=" + apikey)
     print(r)
     load = json.loads(r.content)
 
@@ -28,7 +28,7 @@ def RandomPic():
     amount_str = input("Enter amount of pictures: ")
     amount_int = int(amount_str)
 
-    r = requests.get("https://api.nasa.gov/planetary/apod?count=" + amount_str + "&api_key=NIFH1JyVc1eMgvFxXShtJkGWgPAMFFjoCKJpcDmB")
+    r = requests.get("https://api.nasa.gov/planetary/apod?count=" + amount_str + "&api_key=" + apikey)
     print(r)
     load = json.loads(r.content)
 
@@ -46,6 +46,9 @@ def RandomPic():
         explanation.write("\nexplanation: " + load[x]['explanation'])
         explanation.close()
 
+
+
+apikey = input("Enter API KEY: ")
 
 
 PicOfTheDay()
